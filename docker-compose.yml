@@ -1,0 +1,34 @@
+version: "3.9" # docker-compose 설정파일 버전
+services:
+  rabbitmq:
+    # rabbitmq 설정
+    image: rabbitmq:3.13-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - service-network
+  producer:
+    # producer 설정
+    build: ./producer
+    ports:
+      - "3001:3001"
+    volumes:
+      - logvolume01:/var/log
+    networks:
+      - service-network
+  consumer:
+    # consumer 설정
+    build: ./consumer
+    ports:
+      - "3003:3003"
+    volumes:
+      - logvolume01:/var/log
+    networks:
+      - service-network
+
+# 네트워크, 볼륨 등 docker resource 설정
+volumes:
+  logvolume01: {}
+networks:
+  service-network: {}
